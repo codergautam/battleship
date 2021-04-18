@@ -20,5 +20,10 @@ class Board {
      }  
      $this->board = $array_;
    } 
+
+   public function placeShip($ship)
+   {
+        # code...
+   }
 }
 ?>
