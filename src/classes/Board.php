@@ -25,5 +25,27 @@ class Board {
    {
         # code...
    }
+
+   public function toAscii()
+   {
+        # code...
+        $alphas = range('A', 'Z');
+        $output = "  ";
+        for ($i = 0; $i < count($this->board); $i++ ) {
+          $output = $output . strval($i+1);
+          $output = $output .  " ";
+        }
+        $output = $output. "\n";
+        foreach ($this->board as $key => $value) {
+             # code...
+             $output = $output . $alphas[$key] ." ";
+             foreach ($value as $key1 => $value1) {
+                  # code...
+                  $output = $output . $value1 . " ";
+             }
+             $output = $output . "\n";
+        }
+        return $output;
+   }
 }
 ?>
