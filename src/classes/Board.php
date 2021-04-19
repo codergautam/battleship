@@ -6,7 +6,7 @@ class Board {
    function __construct($length1, $width1) {
         //echo $length1;
         $this->length = $length1;
-        $this->height = $height1;
+        $this->width = $width1;
         
      $array_ = [];
 
@@ -31,7 +31,7 @@ class Board {
         # code...
         $alphas = range('A', 'Z');
         $output = "  ";
-        for ($i = 0; $i < count($this->board); $i++ ) {
+        for ($i = 0; $i < $this->width; $i++ ) {
           $output = $output . strval($i+1);
           $output = $output .  " ";
         }
