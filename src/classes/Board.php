@@ -13,7 +13,7 @@ class Board {
      for ($k = 0 ; $k < $length1 ; $k++){
           $arrayToAdd = [];
           for ($i = 0 ; $i < $width1 ; $i++) {
-               array_push($arrayToAdd, "0");
+               array_push($arrayToAdd, " ");
           }
           array_push($array_, $arrayToAdd);
          
