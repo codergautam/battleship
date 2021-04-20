@@ -3,11 +3,12 @@ class Board {
      public $board;
     public $length;
     public $width;
+    public $ships;
    function __construct($length1, $width1) {
         //echo $length1;
         $this->length = $length1;
         $this->width = $width1;
-        
+        $this->ships = [];
      $array_ = [];
 
      for ($k = 0 ; $k < $length1 ; $k++){
@@ -23,7 +24,11 @@ class Board {
 
    public function placeShip($ship)
    {
-        # code...
+       array_push($this->ships, $ship);
+       foreach ($ship->getPoints() as $key => $point) {
+            # code...
+            $this->setPoint($point, "a");
+       }
    }
 
    public function toAscii()
@@ -47,5 +52,9 @@ class Board {
         }
         return $output;
    }
+
+   public function setPoint($point, $value) {
+        $this->board[$point->y][$point->x] = $value;
+   } 
 }
 ?>
