@@ -30,6 +30,7 @@ class Ship {
             }
 
         }
+        return $points;
     }
 }
 ?>
