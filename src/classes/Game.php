@@ -1,5 +1,5 @@
 <?php
-include 'Board.php';
+
 
 class Game {
     public $player2;

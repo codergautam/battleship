@@ -1,9 +1,8 @@
 <?php
-include "classes/Game.php";
-include "classes/Position.php";
-$gameboard = new Game(" ", " e");
-$pos = new Position("K2");
+include_once("classes/classes.php");
+//$pos = new Position("A2");
+$ship = new Ship(new Position("C1"), 3, true);
 echo "<pre>";
-var_dump($pos->getPoint($gameboard->board));
+var_dump($ship->getPoints());
 echo "</pre>";
 ?>
