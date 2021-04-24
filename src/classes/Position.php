@@ -16,9 +16,5 @@ class Position {
             $this->asString = $alphas[$y1].($loc+1);
         }
     }
-
-    public function getPoint($l) {
-        return $l->board[$this->x][$this->y];
-    }
 }
 ?>
