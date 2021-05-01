@@ -21,10 +21,23 @@ class Board {
      }  
      $this->board = $array_;
    } 
+   public function isPlaceable($ship)
+   {
+        $output = true;
+        foreach ($ship->getPoints() as $key => $point) {
+
+          # check if point is already used
+          if(!$this->isEmpty($point)) {
+               $output = false;
+          }
+     }
+     return $output;
+   }
 
    public function placeShip($ship)
    {
         $letter = range("a", "z")[count($this->ships)];
+        if($this->isPlaceable($ship)) {
        array_push($this->ships, $ship);
        foreach ($ship->getPoints() as $key => $point) {
             # check if point is already used
@@ -34,6 +47,9 @@ class Board {
             $this->setPoint($point, $letter);
        }
        return true;
+     } else {
+          return false;
+     }
    }
 
    public function toAscii()
