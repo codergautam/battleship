@@ -4,6 +4,7 @@ class Player {
     public  $board;
     public $game;
     public $playerNum;
+    public $donePlacing;
 function __construct($name, $playerNum)
 {
     $this->name = $name;

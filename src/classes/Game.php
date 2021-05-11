@@ -19,6 +19,16 @@ class Game {
         $this->player1->game = $this;
         $this->player2->game = $this;
     }
-
+    public function donePlacing($player) {
+        if($player->playerNum == 1) {
+            if($this->player2->donePlacing) {
+                $this->state = 1;
+            }
+        } else {
+            if($this->player1->donePlacing) {
+                $this->state = 1;
+            }
+        }
+    } 
 }
 ?>
