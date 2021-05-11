@@ -15,32 +15,39 @@ class ComputerPlayer extends Player {
        while (count($board->ships) <= 4) {
            # code...
            if($fivesleft > 0) {
-                $ship = new Ship(new Position(mt_rand(0,10), mt_rand(0,10)), 5, (mt_rand(0,1) == 1));
+                $ship = new Ship($board->getRandomPoint(), 5, (mt_rand(0,1) == 1));
                 if($board->placeShip($ship)) {
                 $fivesleft -= 1;
                 }
            } else if($foursleft > 0 ) {
-            $ship = new Ship(new Position(mt_rand(0,10), mt_rand(0,10)), 4, (mt_rand(0,1) == 1));
+            $ship = new Ship($board->getRandomPoint(), 4, (mt_rand(0,1) == 1));
             
             if($board->placeShip($ship)) {
             $foursleft -= 1;
             }
            } else if($threesleft > 0) {
-            $ship = new Ship(new Position(mt_rand(0,10), mt_rand(0,10)), 3, (mt_rand(0,1) == 1));
+            $ship = new Ship($board->getRandomPoint(), 3, (mt_rand(0,1) == 1));
             if($board->placeShip($ship)) {
             $threesleft -= 1;
             }
            } else if($twosleft > 0) {
-            $ship = new Ship(new Position(mt_rand(0,10), mt_rand(0,10)), 2, (mt_rand(0,1) == 1));
+            $ship = new Ship($board->getRandomPoint(), 2, (mt_rand(0,1) == 1));
             if($board->placeShip($ship)) {
             $twosleft -= 1;
             }
                   } else {
-
-            $this->donePlacing = true;
+  
             return;
            }
        }
+       $this->donePlacing = true;
+       $this->game->donePlacing($this);
+       return;
+    }
+
+    public function onTurn() {
+        echo "Player ".$this->playerNum." turn";
+        //$this->game->nextTurn();
     }
 }
 ?>

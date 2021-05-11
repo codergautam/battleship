@@ -53,7 +53,9 @@ class Board {
           return false;
      }
    }
-
+   public function getRandomPoint() {
+        return new Position(mt_rand(0,$this->length-1), mt_rand(0,$this->width-1));
+   }
    public function toAscii()
    {
         # code...

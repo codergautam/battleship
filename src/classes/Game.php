@@ -7,8 +7,12 @@ class Game {
     public  $board1;
     public  $board2;
     public $state;
-    function __construct($player11, $player22) {
+    public $turn;
+    function __construct(Player $player11, Player $player22) {
+        $this->turn = 0;
+        $player11->playerNum = 1;
         $this->player1 = $player11;
+        $player22->playerNum = 2;
         $this->player2 = $player22;
         $this->board1 = new Board(10, 10);
         $this->board2= new Board(10, 10);
@@ -19,7 +23,27 @@ class Game {
         $this->player1->game = $this;
         $this->player2->game = $this;
     }
-    public function donePlacing($player) {
+    public function getPlayer($num) {
+        if($num ==1) {
+            return $this->player1;
+        } else {
+            return $this->player2;
+        }
+    }
+    function start() {
+        $this->turn = mt_rand(1,2);
+        $this->getPlayer($this->turn)->onTurn();
+    }
+
+    public function nextTurn() {
+        $this->turn = ($this->turn == 1 ? 2 : 1);
+        $this->getPlayer($this->turn)->onTurn();
+    }
+    public function hit(Position $pos, Player $player) {
+
+    }
+    public function donePlacing(Player $player) {
+        //echo strval($player->playerNum);
         if($player->playerNum == 1) {
             if($this->player2->donePlacing) {
                 $this->state = 1;
@@ -29,6 +53,12 @@ class Game {
                 $this->state = 1;
             }
         }
+
+        if($this->state == 1) {
+            $this->start();           
+        }
+
+
     } 
 }
 ?>
