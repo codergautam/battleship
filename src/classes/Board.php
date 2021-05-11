@@ -21,8 +21,10 @@ class Board {
      }  
      $this->board = $array_;
    } 
-   public function isPlaceable($ship)
+   public function isPlaceable(Ship $ship)
    {
+
+     if($ship->getPoints() == NULL) return false;
         $output = true;
         foreach ($ship->getPoints() as $key => $point) {
 
@@ -34,7 +36,7 @@ class Board {
      return $output;
    }
 
-   public function placeShip($ship)
+   public function placeShip(Ship $ship)
    {
         $letter = range("a", "z")[count($this->ships)];
         if($this->isPlaceable($ship)) {
@@ -74,15 +76,15 @@ class Board {
         return $output;
    }
 
-   public function setPoint($point, $value) {
+   public function setPoint(Position $point, $value) {
         $this->board[$point->y][$point->x] = $value;
    } 
 
-   public function getPoint($point) {
+   public function getPoint(Position $point) {
         return $this->board[$point->y][$point->x];
    }
 
-   public function isEmpty($point) {
+   public function isEmpty(Position $point) {
         return $this->getPoint($point) == " ";
    }
 }
