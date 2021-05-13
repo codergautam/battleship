@@ -3,12 +3,17 @@ class Ship {
     public $starting;
     public $length;
     public $up;
+    public $sunk;
+    public $letter;
+    public $pointsHit;
     function __construct($starting, $length1, $up1) {
         $this->starting = $starting;
         $this->length = $length1;
         $this->up = $up1;
-    }
+        $this->sunk = FALSE;
+        $this->pointsHit = [];
 
+    }
     public function getPoints() {
         $points = array();
         if($this->up) {

@@ -40,7 +40,25 @@ class Game {
         $this->getPlayer($this->turn)->onTurn();
     }
     public function hit(Position $pos, Player $player) {
+        array_push($player->board->pointsHit, $pos);
+        $enemy = $this->getPlayer($player->playerNum == 1 ? 2 : 1);
+        $ship = $enemy->board->checkShip($pos);
+      //  var_dump($ship);
+        //echo "<br>";
+         if($ship) {
+             if(in_array($pos, $ship->pointsHit)) {
+               echo "Player ".$player->playerNum."<br>ALREADY HIT ".$pos->asString."<br>";
+              
+             } else {
+                             echo "Player ".$player->playerNum."<br>HIT ".$pos->asString."<br>";
+            array_push($ship->pointsHit, $pos);
+            
+        }
+         } else {
 
+       //  echo "Player ".$player->playerNum."<br>Missed ".$pos->asString."<br>";
+         }
+         
     }
     public function donePlacing(Player $player) {
         //echo strval($player->playerNum);

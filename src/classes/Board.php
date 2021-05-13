@@ -4,11 +4,13 @@ class Board {
     public $length;
     public $width;
     public $ships;
+    public $pointsHit;
    function __construct($length1, $width1) {
         //echo $length1;
         $this->length = $length1;
         $this->width = $width1;
         $this->ships = [];
+        $this->pointsHit = [];
      $array_ = [];
 
      for ($k = 0 ; $k < $length1 ; $k++){
@@ -21,6 +23,21 @@ class Board {
      }  
      $this->board = $array_;
    } 
+   public function isAlreadyHit($x, $y) {
+        //echo count($this->pointsHit);
+       // echo "<br>";
+        if(count($this->pointsHit) >= 1)  {
+             
+        foreach ($this->pointsHit as $key => $point) {
+             if(($point->x == $x) && ($point->y == $y)) {
+                  return TRUE;
+             }
+        }
+        return FALSE;
+     } else {
+          return FALSE;
+     }
+   }
    public function isPlaceable(Ship $ship)
    {
 
@@ -48,6 +65,7 @@ class Board {
             }
             $this->setPoint($point, $letter);
        }
+       $ship->letter =$letter;
        return true;
      } else {
           return false;
@@ -77,7 +95,26 @@ class Board {
         }
         return $output;
    }
+   public function getShip($letter)
+   {
+     foreach ($this->ships as $key => $ship) {
+          if($ship->letter == $letter) {
+               return $ship;
+          }
 
+     }
+     return FALSE;
+   }
+
+   public function checkShip(Position $point)
+   {
+        $letters = range("a", "z");
+        if(in_array($this->getPoint($point), $letters)) {
+          return $this->getShip($this->getPoint($point));
+
+        }
+        return FALSE;
+   }
    public function setPoint(Position $point, $value) {
         $this->board[$point->y][$point->x] = $value;
    } 
