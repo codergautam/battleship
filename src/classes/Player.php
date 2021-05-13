@@ -1,14 +1,14 @@
 <?php
 class Player {
-    public $name;
+    //public $name;
     public $board;
     public $game;
     public $playerNum;
     public $donePlacing;
-function __construct($name )
+function __construct( )
 {
     $this->donePlacing = false;
-    $this->name = $name;
+   // $this->name = $name;
     //$this->playerNum = $playerNum;
 }
 
