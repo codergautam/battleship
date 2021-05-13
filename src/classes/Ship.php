@@ -14,6 +14,9 @@ class Ship {
         $this->pointsHit = [];
 
     }
+    public function isAllPointsHit() {
+        return count($this->pointsHit) == count($this->getPoints());
+    }
     public function getPoints() {
         $points = array();
         if($this->up) {

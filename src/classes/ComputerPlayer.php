@@ -69,12 +69,10 @@ class ComputerPlayer extends Player {
 
         $randomPoint = [mt_rand(0,$enemy->board->width-1), mt_rand(0,$enemy->board->length-1)];
         if($this->board->isAlreadyHit($randomPoint[0], $randomPoint[1])) {
-          // echo "Already hit CATCHED! <br>";
-            $this->game->nextTurn();
+            $this->onTurn();
         } else {
         $this->game->hit(new Position($randomPoint[0], $randomPoint[1]), $this);
-
-        $this->game->nextTurn();
+        
         }
         
         //$this->game->nextTurn(); 

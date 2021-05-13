@@ -23,6 +23,13 @@ class Board {
      }  
      $this->board = $array_;
    } 
+   public function isAllShipsSunk() {
+        foreach ($this->ships as $key => $ship) {
+             if(!$ship->sunk) return FALSE;
+
+        }
+        return TRUE;
+   }
    public function isAlreadyHit($x, $y) {
         //echo count($this->pointsHit);
        // echo "<br>";
