@@ -1,5 +1,5 @@
 <?php
-include_once("classes.php");
+include_once("easyinclude.php");
 //$pos = new Position("A2");
 $game = new Game(new ComputerPlayer(), new ComputerPlayer());
 $game->player1->placeShips();

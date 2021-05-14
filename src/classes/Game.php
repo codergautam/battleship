@@ -30,6 +30,18 @@ class Game {
             return $this->player2;
         }
     }
+        public function getPlayerFromId($id) {
+        if ($id == $this->player1->id) {
+          /*  $this->player2->placeShips();
+             return $this->player2; */
+             
+           return $this->player1;
+        } else if ($id == $this->player2->id) {
+            return $this->player2;
+        } else {
+            return NULL;
+        } 
+    }
     function start() {
         if ($this->state == 1) {
             $this->turn = mt_rand(1, 2);
