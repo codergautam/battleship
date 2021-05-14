@@ -1,6 +1,11 @@
 var state = 0;
 var board = undefined;
-
+var shipsToPlace = 5;
+var up = false; 
+var boardwidth = 10;
+var boardheight = 10;
+var placestate = 0;
+var currentselect;
 function elem(id) {
     return document.getElementById(id);
 }
@@ -62,8 +67,93 @@ const alphabet = Array.from(Array(26)).map((e, i) => i + 65).map((x) => String.f
 
     }
 
+    function getShipLetter(num) {
+        if(num == 5) {
+            return "a";
+        } else if(num == 4) {
+            return "b";
+        } else if(num == 3) {
+return "c";
+        } else if(num == 2) {
+return "d";
+        } else {
+return "e";
+        }
+    }
+
+    function getShipLength(num) {
+                if(num == 5) {
+            return 5;
+        } else if(num == 4) {
+            return 4;
+        } else if(num == 3) {
+return 3;
+        } else if(num == 2) {
+return 3;
+        } else {
+return 2;
+        }
+    }
+
+function checkPlaceShip(ship) {
+    isPlaceable = true;
+    var cc = 0;
+            ship.getPoints().forEach((point) => {
+            if(point.x > boardwidth-1 || point.x < 0 || point.y < 0 || point.y > boardheight-1 ) {
+                isPlaceable = false
+                }
+                cc++
+        })
+        return isPlaceable;
+}
     function placeCellClick(pos) {
-        alert(pos.asString)
+        if(placestate == 0 ||placestate == 1) {
+            elem("confirm").disabled = false
+            elem("cancel").disabled = false
+            if(currentselect) {
+                elem(currentselect.asString).innerHTML = " ";
+            }
+            //check if click area is already taken
+            if(elem(pos.asString).innerHTML == " ") {
+                elem(pos.asString).innerHTML = getShipLetter(shipsToPlace);
+                elem("confirm").innerHTML = "Down"
+                elem("cancel").innerHTML = "Right"
+                                elem("confirm").style.display = ""
+                elem("cancel").style.display = ""
+                var downship = new Ship(pos, getShipLength(shipsToPlace), true);
+                var rightship = new Ship(pos, getShipLength(shipsToPlace), false);
+                if(!checkPlaceShip(downship)) {
+                    console.log("ffff")
+                    elem("confirm").disabled = true
+                }
+                if(!checkPlaceShip(rightship)) {console.log("ffdff")
+                    elem("cancel").disabled = true
+                    }
+                currentselect = pos;
+                placestate = 1;
+            }
+        } 
+
+
+
+        //console.log(pos)
+        /*
+        var isPlaceable = true;
+        ship = new Ship(pos, 5, true);
+        if(ship.getPoints()) {
+        ship.getPoints().forEach((point) => {
+            if(point.x > boardwidth || point.x < 0 || point.y < 0 || point.y > boardheight) {
+                isPlaceable = false
+                }
+        })
+        if(isPlaceable) {
+                    ship.getPoints().forEach((point) => {
+                        //console.log(point);
+          elem(point.asString).innerHTML = "a"  
+        })
+        }
+        
+        } */
     }
 function reconnect() {
     elem("text-main").innerHTML = "Reconnect Feature priority: low"
@@ -73,6 +163,35 @@ elem("text-main").innerHTML = "Unexpected Error!<br>Check console for detailed i
 console.log(e)
 }
 
+elem("confirm").onclick = function() {
+    if(placestate == 1) {
+        //right
+
+        var ship = new Ship(currentselect, getShipLength(shipsToPlace), true)
+   ship.getPoints().forEach((point) => {
+                        //console.log(point);
+          elem(point.asString).innerHTML = getShipLetter(shipsToPlace);  
+        })
+        placestate = 2;
+    } else if(placestate == 2) {
+
+
+
+    }
+}
+elem("cancel").onclick = function() {
+    if(placestate == 1) {
+        //right
+        var ship = new Ship(currentselect, getShipLength(shipsToPlace), false)
+   ship.getPoints().forEach((point) => {
+                        //console.log(point);
+          elem(point.asString).innerHTML = getShipLetter(shipsToPlace);  
+        })
+        placestate = 2;
+    } else if(placestate == 2) {
+
+    }
+}
 
 var gameId = sessionStorage.getItem('gameId');
 var playerId = sessionStorage.getItem('playerId');
@@ -89,9 +208,13 @@ var playerId = sessionStorage.getItem('playerId');
                  playerId = sessionStorage.getItem('playerId');
                 elem("text-main").innerHTML = "Retrieving game board.."
                 sendRequest("../api/get_board.php?id="+gameId+"&playerId="+playerId).then((boardInfo) => {
-                    if(boardInfo.success) {
-                        elem("text-main").innerHTML = "Place your ships!<br><br>"
+                    if(boardInfo.success) {                  
+                        elem("text-main").innerHTML = "Place your ships<br>"
+                        elem("text-secondary").innerHTML = "Currently placing: Battleship (Length 5)<br>5 more ships to go!<br><br>";
                         board = boardInfo.board;
+                        boardwidth = board[0].length;
+                        boardheight = board.length;
+                        console.log(boardwidth, boardheight);
                         createTable(board)
                         tableListener()
                     } else {

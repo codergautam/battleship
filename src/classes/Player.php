@@ -1,15 +1,17 @@
 <?php
 class Player {
-    //public $name;
+   // public $name;
     public $board;
     public $game;
     public $playerNum;
     public $donePlacing;
-function __construct( )
+    public $id;
+function __construct($id )
 {
     $this->donePlacing = false;
-   // $this->name = $name;
+    //$this->name = $name;
     //$this->playerNum = $playerNum;
+    $this->id = $id;
 }
 
 public function placeShip(Ship $ship) {

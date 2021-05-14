@@ -9,8 +9,13 @@ class Position {
         this.asString = alphas[y]+(x+1);
         } else {
         this.asString = x;
-        this.x = parseInt(x.charAt(1))-1;
-        this.y = x.charCodeAt(0) - 97;
+        if(x.charAt(2)) {
+            this.x = parseInt(x.charAt(1)+x.charAt(2))-1;
+        } else {
+            this.x = parseInt(x.charAt(1))-1;
+        }
+        
+        this.y = x.toLowerCase().charCodeAt(0) - 97;
         }
     }
 }

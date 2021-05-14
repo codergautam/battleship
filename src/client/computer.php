@@ -23,8 +23,10 @@
         <div id="main" class="container">
             <div class="text-center">
                 <h1 id="text-main"class="mt-5">Loading code..</h1>
-            <!--    <p class="lead">A complete project boilerplate built with Bootstrap</p>
-                <ul class="list-unstyled">
+                <p class="lead" id="text-secondary"></p>
+                <button id="confirm" style="display: none;" type="button" class="btn btn-secondary"></button>
+                <button id="cancel" style="display: none;" type="button" class="btn btn-secondary"></button>
+            <!--    <ul class="list-unstyled">
                     <li>Bootstrap 4.6.0</li>
                     <li>jQuery 3.5.1</li>
                 </ul>
@@ -34,7 +36,9 @@
         <!-- Bootstrap core JS-->
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+        
         <script src="Position.js"></script>
+        <script src="Ship.js"></script>
         <script src="computer.js"></script>
     </body>
 </html>
