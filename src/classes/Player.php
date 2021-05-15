@@ -6,9 +6,11 @@ class Player {
     public $playerNum;
     public $donePlacing;
     public $id;
+    public $turn;
 function __construct($id )
 {
     $this->donePlacing = false;
+    $this->turn = false;
     //$this->name = $name;
     //$this->playerNum = $playerNum;
     $this->id = $id;
@@ -19,7 +21,7 @@ public function placeShip(Ship $ship) {
 }
 
 public function onTurn() {
-    
+    $this->turn = true;
 }
 }
 ?>

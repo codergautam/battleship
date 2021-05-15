@@ -56,18 +56,18 @@ justify-content: center;
       <!-- <a href="play.php"><img src = "LogoMakr-7hm9Gd.png" height="200" width="200"></a>  -->
         <br><br><br><br>
         <div class="flex">
-        <button type="button" onclick="play()"class="btn btn-primary" button>Play against Computer!</button>
-                <!-- <button type="button" onclick="about()"class="btn btn-secondary" button>About Game</button> -->
+        <button type="button" onclick="computer()"class="btn btn-primary" button>Play against Computer!</button>
+                 <button type="button" onclick="human()"class="btn btn-secondary" button>Play multiplayer! (very very buggy)</button>
                 </div>
                 </center>
 </div>
             <script>
             
-                function play() {
+                function computer() {
                     location.href = "computer.php"
                 }
-                function about() {
-                    location.href = "about.html"
+                function human() {
+                    location.href = "human.php"
                 }
             </script>
 

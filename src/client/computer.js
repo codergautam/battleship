@@ -6,6 +6,25 @@ var boardwidth = 10;
 var boardheight = 10;
 var placestate = 0;
 var currentselect;
+var isUp;
+var shipStart;
+var placing = true;
+var gameId = sessionStorage.getItem('gameId');
+var playerId = sessionStorage.getItem('playerId');var state = 0;
+var board = undefined;
+var shipsToPlace = 5;
+var up = false; 
+var boardwidth = 10;
+var boardheight = 10;
+var placestate = 0;
+var currentselect;
+var isUp;
+var shipStart;
+var placing = true;
+var gameId = sessionStorage.getItem('gameId');
+var playerId = sessionStorage.getItem('playerId');
+var turn = true;
+var serverResponded = true;
 function elem(id) {
     return document.getElementById(id);
 }
@@ -17,11 +36,12 @@ function sendRequest(to) {
     }))
     })
 }
-function createTable(tableData) {
+function createTable(tableData, enemy) {
 const alphabet = Array.from(Array(26)).map((e, i) => i + 65).map((x) => String.fromCharCode(x));
       var table = document.createElement('table');
+
       table.className = "table table-bordered"
-      table.id = "placeBoard";
+      table.id = (enemy?"enemyBoard":"placeBoard");
       var row = {};
       var cell = {};
     var counter = 0;
@@ -44,13 +64,15 @@ const alphabet = Array.from(Array(26)).map((e, i) => i + 65).map((x) => String.f
 
           cell = row.insertCell();
     			cell.textContent = cellData;
-                cell.className = "placeCell";
-                cell.id = new Position(counterx, counter).asString
+                cell.className = (enemy?"enemyCell":"placeCell");
+                cell.id = new Position(counterx, counter).asString+(enemy?"e":"")
                 counterx++
         });
         counter++
       });
+   
       elem("main").appendChild(table);
+      
     }
     function tableListener() {
             var table = document.getElementById("placeBoard");
@@ -67,6 +89,32 @@ const alphabet = Array.from(Array(26)).map((e, i) => i + 65).map((x) => String.f
 
     }
 
+    function enemyListener() {
+                    var table = document.getElementById("enemyBoard");
+    if (table != null) {
+        for (var i = 0; i < table.rows.length; i++) {
+            for (var j = 0; j < table.rows[i].cells.length; j++)
+            table.rows[i].cells[j].onclick = function () {
+                if(this.classList.contains("enemyCell")) {
+                    enemyCellClick(new Position(this.id.slice(0,-1)));
+                }
+            };
+        }
+    }
+    }
+
+    function colorCells(arr, enemy) {
+        arr.forEach(function(cellLoc) {
+            if(enemy) {
+                var cell = elem(cellLoc+"e");
+                 cell.style.backgroundColor = "red";
+            } else {
+                var cell = elem(cellLoc)
+                cell.style.backgroundColor = "lime";
+            }
+        })
+    }
+
     function getShipLetter(num) {
         if(num == 5) {
             return "a";
@@ -80,7 +128,19 @@ return "d";
 return "e";
         }
     }
-
+    function getShipName(num) {
+        if(num == 5) {
+            return "Carrier";
+        } else if(num == 4) {
+            return "Battleship";
+        } else if(num == 3) {
+return "Cruiser";
+        } else if(num == 2) {
+return "Submarine";
+        } else {
+return "Destroyer";
+        }
+    }
     function getShipLength(num) {
                 if(num == 5) {
             return 5;
@@ -99,7 +159,7 @@ function checkPlaceShip(ship) {
     isPlaceable = true;
     var cc = 0;
             ship.getPoints().forEach((point) => {
-            if(point.x > boardwidth-1 || point.x < 0 || point.y < 0 || point.y > boardheight-1 ) {
+            if(point.x > boardwidth-1 || point.x < 0 || point.y < 0 || point.y > boardheight-1 || (elem(point.asString).innerHTML != " " && elem(point.asString).innerHTML != getShipLetter(shipsToPlace))) {
                 isPlaceable = false
                 }
                 cc++
@@ -107,6 +167,8 @@ function checkPlaceShip(ship) {
         return isPlaceable;
 }
     function placeCellClick(pos) {
+        if(!placing) return 
+        if(document.getElementById(pos.asString).innerHTML == " ") {
         if(placestate == 0 ||placestate == 1) {
             elem("confirm").disabled = false
             elem("cancel").disabled = false
@@ -123,38 +185,56 @@ function checkPlaceShip(ship) {
                 var downship = new Ship(pos, getShipLength(shipsToPlace), true);
                 var rightship = new Ship(pos, getShipLength(shipsToPlace), false);
                 if(!checkPlaceShip(downship)) {
-                    console.log("ffff")
                     elem("confirm").disabled = true
                 }
-                if(!checkPlaceShip(rightship)) {console.log("ffdff")
+                if(!checkPlaceShip(rightship)) {
                     elem("cancel").disabled = true
                     }
                 currentselect = pos;
                 placestate = 1;
             }
-        } 
-
-
-
-        //console.log(pos)
-        /*
-        var isPlaceable = true;
-        ship = new Ship(pos, 5, true);
-        if(ship.getPoints()) {
-        ship.getPoints().forEach((point) => {
-            if(point.x > boardwidth || point.x < 0 || point.y < 0 || point.y > boardheight) {
-                isPlaceable = false
-                }
-        })
-        if(isPlaceable) {
-                    ship.getPoints().forEach((point) => {
-                        //console.log(point);
-          elem(point.asString).innerHTML = "a"  
-        })
         }
-        
-        } */
+        } 
+    } 
+
+    function enemyCellClick(pos) {
+        if(serverResponded) {
+        if(state == 1) {
+        if(turn) {
+            if (elem(pos.asString+"e").innerHTML == " ") {
+            sendRequest(`../api/hit.php?id=${gameId}&playerId=${playerId}&pos=${pos.asString}`)
+            .then((hitData)=>{
+                if(hitData.success) {
+                    elem(pos.asString+"e").innerHTML = "⌛"
+                    serverResponded = false;
+                } else {
+                   // alert(hitData.errormsg)
+                }
+            }).catch(err)
+            }
+        }
+        }
+        }
     }
+
+function updateEnemyBoard(arr) {
+    arr.forEach(function(row, ir) {
+        row.forEach(function(cell, ic) {
+                       theElem = elem(new Position(ic, ir).asString+"e");
+            theElem.innerHTML = (cell == "X" ? "💥" : cell);
+            if(cell == "X") theElem.style.backgroundColor = "lime";
+        })
+    })
+}
+function updateBoard(arr) {
+    arr.forEach(function(row, ir) {
+        row.forEach(function(cell, ic) {
+            theElem = elem(new Position(ic, ir).asString)
+            theElem.innerHTML = (cell == "X" ? "💥" : cell);
+            if(cell == "X") theElem.style.backgroundColor = "red";
+        })
+    })
+}
 function reconnect() {
     elem("text-main").innerHTML = "Reconnect Feature priority: low"
 }
@@ -165,16 +245,68 @@ console.log(e)
 
 elem("confirm").onclick = function() {
     if(placestate == 1) {
-        //right
-
+        //up
+    
         var ship = new Ship(currentselect, getShipLength(shipsToPlace), true)
+        shipStart = ship;
+        isUp = true;
    ship.getPoints().forEach((point) => {
                         //console.log(point);
           elem(point.asString).innerHTML = getShipLetter(shipsToPlace);  
         })
+                elem("cancel").disabled = false
+        elem("confirm").disabled = false
+        elem("confirm").innerHTML = "Confirm";
+        elem("cancel").innerHTML = "Cancel";
         placestate = 2;
     } else if(placestate == 2) {
+sendRequest(`../api/place_ship.php?id=${gameId}&playerId=${playerId}&up=${isUp?"1":"0"}&pos=${shipStart.starting.asString}&length=${getShipLength(shipsToPlace)}`)
+.then((placeData) => {
+    if(placeData.success) {
+        placestate = 0;
+        elem("confirm").style.display = "none";
+        elem("cancel").style.display = "none";
+        shipsToPlace -= 1;
+        currentselect = undefined;
+        if(shipsToPlace == 0) {
+            sendRequest(`../api/done_placing.php?id=${gameId}&playerId=${playerId}`)
+.then((doneData) => {
+    if(doneData.success) {
+        placing = false;
+        elem("text-main").innerHTML = ""
+        elem("text-secondary").innerHTML = ""
 
+        state = 1;
+    sendRequest("../api/get_enemy_board.php?id="+gameId+"&playerId="+playerId).then((enemyBoardData) => {
+         if(enemyBoardData.success) {
+             createTable(enemyBoardData.board, true);
+                     enemyListener()
+                     $("#enemyBoard").appendTo("#row");
+                     $("#placeBoard").prependTo("#row");
+                     elem("placeBoard").className = "table table-bordered col-md-6"
+                     elem("enemyBoard").className = "table table-bordered col-md-6"
+                      elem("rfow").style.display = "";
+         } else {
+             alert(enemyBoardData.errormsg)
+         }
+     })
+    } else {
+        alert(doneData.errormsg);
+    }
+}).catch(err)
+        } else {
+                                elem("text-secondary").innerHTML = `Currently placing: ${getShipName(shipsToPlace)} (Length ${getShipLength(shipsToPlace)})<br>${shipsToPlace} more ships to go!<br><br>`;
+        }
+    } else {
+        alert(placeData.errormsg);
+ /*          shipStart.getPoints().forEach((point) => {
+                        //consofle.log(point);
+          elem(point.asString).innerHTML = " ";  
+        })
+        shipsToPlace += 1;
+        elem("text-secondary").innerHTML = `Currently placing: ${getShipName(shipsToPlace)} (Length ${getShipLength(shipsToPlace)})<br>${shipsToPlace} more ships to go!<br><br>`;*/
+    }
+}).catch(err)
 
 
     }
@@ -183,18 +315,30 @@ elem("cancel").onclick = function() {
     if(placestate == 1) {
         //right
         var ship = new Ship(currentselect, getShipLength(shipsToPlace), false)
+        shipStart = ship;
+        isUp = false;
    ship.getPoints().forEach((point) => {
                         //console.log(point);
           elem(point.asString).innerHTML = getShipLetter(shipsToPlace);  
         })
+        elem("cancel").disabled = false
+        elem("confirm").disabled = false
+                elem("confirm").innerHTML = "Confirm";
+        elem("cancel").innerHTML = "Cancel";
         placestate = 2;
     } else if(placestate == 2) {
-
+        placestate = 1;
+                elem("cancel").style.display = "none"
+        elem("confirm").style.display = "none"
+        var ship = shipStart;
+        ship.getPoints().forEach((point) => {
+            elem(point.asString).innerHTML = " ";
+        })
     }
 }
 
-var gameId = sessionStorage.getItem('gameId');
-var playerId = sessionStorage.getItem('playerId');
+
+
 //if(gameId && playerId) {
  //reconnect()
 //} else {
@@ -210,12 +354,12 @@ var playerId = sessionStorage.getItem('playerId');
                 sendRequest("../api/get_board.php?id="+gameId+"&playerId="+playerId).then((boardInfo) => {
                     if(boardInfo.success) {                  
                         elem("text-main").innerHTML = "Place your ships<br>"
-                        elem("text-secondary").innerHTML = "Currently placing: Battleship (Length 5)<br>5 more ships to go!<br><br>";
+                        elem("text-secondary").innerHTML = "Currently placing: Carrier (Length 5)<br>5 more ships to go!<br><br>";
                         board = boardInfo.board;
                         boardwidth = board[0].length;
                         boardheight = board.length;
                         console.log(boardwidth, boardheight);
-                        createTable(board)
+                        createTable(board, false);
                         tableListener()
                     } else {
 elem("text-main").innerHTML = "Failed fetching board!<br><br>"+boardInfo.errormsg;
@@ -226,3 +370,66 @@ elem("text-main").innerHTML = "Failed fetching board!<br><br>"+boardInfo.errorms
         }
     }).catch(err)
 //}
+
+setInterval(() => {
+    if(state == 1 ) {
+        /*
+     sendRequest("../api/get_turn.php?id="+gameId+"&playerId="+playerId).then((turnData) => {
+         if(turnData.success) {
+             var oldTurn = turn;
+             turn = turnData.yourTurn;
+            if(oldTurn != turn) {
+                elem("text-main").innerHTML = turn ? "Your turn!" : "Computers turn.."
+               // elem("text-secondary").innerHTML = "Your board" */
+                     sendRequest("../api/get_enemy_board.php?id="+gameId+"&playerId="+playerId).then((enemyBoardData) => {
+         if(enemyBoardData.success) {
+             updateEnemyBoard(enemyBoardData.board)
+             serverResponded = true;
+         } else {
+             alert(enemyBoardData.errormsg)
+         }
+     })
+                          sendRequest("../api/get_board.php?id="+gameId+"&playerId="+playerId).then((boardData) => {
+         if(boardData.success) {
+             updateBoard(boardData.board)
+             
+         } else {
+             alert(boardData.errormsg)
+         }
+     })
+
+            sendRequest("../api/get_state.php?id="+gameId+"&playerId="+playerId).then((stateData) => {
+         if(stateData.success) {
+             if(stateData.state == 2) {
+                 state = 2;
+                 if(stateData.win) {
+                     //ez
+                     elem("text-main").innerHTML = "You won! Congrats!"
+                 } else {
+                     //f'
+                     elem("text-main").innerHTML = "You lost! Better luck next time-"
+                 }
+             }
+         } else {
+             alert(boardData.errormsg)
+         }
+     })
+
+                        sendRequest("../api/stats.php?id="+gameId+"&playerId="+playerId).then((statsData) => {
+         if(statsData.success) {
+            elem("text-secondary").innerHTML = `${statsData.shipsSunkPlayer} of your ships have been sunk.<br>You have sunk ${statsData.shipsSunkEnemy} opponent ships!`
+            /*
+            colorCells(statsData.pointsHitEnemy, false)
+            colorCells(statsData.pointsHitPlayer, true) */
+         }
+     })
+     /*
+            }
+         } else {
+             alert(turnData.errormsg)
+         }
+     })
+*/
+
+    }
+}, 700)

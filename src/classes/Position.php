@@ -16,7 +16,13 @@ class Position {
 
     public function __construct1($loc) {
         $this->asString = $loc;
-        $this->x = intval($loc[1])-1;
+       // echo $loc;
+        if(strlen($loc) == 3) {
+$this->x = intval($loc[1].$loc[2])-1;
+        } else {
+            $this->x = intval($loc[1])-1;
+        }
+        
         $this->y = ord(strtolower($loc[0]))-97;
     }
 

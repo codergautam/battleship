@@ -12,11 +12,12 @@ function generateRandomString($length = 10) {
 }
 
 if($_GET["type"]=="playervsplayer") {
-    
+     echo "Use lobbies for playervsplayer";
 } else if($_GET["type"]=="playervscomputer") {
     $id = generateRandomString();
     $playerId = generateRandomString();
     $game = new Game(new Player($playerId), new ComputerPlayer());
+    $game->player2->placeShips();
     DbUtils::newGame($game, $id); 
     $create = new \stdClass();
     $create->success = true;

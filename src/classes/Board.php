@@ -30,6 +30,13 @@ class Board {
         }
         return TRUE;
    }
+   public function getSunkShips() {
+        $sunkships = [];
+                foreach ($this->ships as $key => $ship) {
+             if($ship->sunk) array_push($sunkships, $ship);
+        }
+        return $sunkships;
+   }
    public function isAlreadyHit($x, $y) {
         //echo count($this->pointsHit);
        // echo "<br>";

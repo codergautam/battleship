@@ -7,6 +7,7 @@ class Game {
     public $board2;
     public $state;
     public $turn;
+    public $winner;
     function __construct(Player $player11, Player $player22) {
         $this->turn = 0;
         $player11->playerNum = 1;
@@ -44,12 +45,19 @@ class Game {
     }
     function start() {
         if ($this->state == 1) {
+        if(get_class($this->player2) == "ComputerPlayer") {
+            $this->turn = 1;
+            $this->player1->onTurn();
+        } else {
+        
             $this->turn = mt_rand(1, 2);
             $this->getPlayer($this->turn)->onTurn();
         }
     }
+    }
 
     public function nextTurn() {
+        $this->getPlayer($this->turn)->turn = false;
         $this->turn = ($this->turn == 1 ? 2 : 1);
         $this->getPlayer($this->turn)->onTurn();
     }
@@ -75,6 +83,7 @@ class Game {
 //                        echo "Player " . $player->playerNum . " WON!!! ";
 
                         $this->state = 2;
+                        $this->winner = $player;
                     }
                     else {
                         $this->nextTurn();

@@ -2,7 +2,7 @@ class Ship {
     constructor(pos, length, up) {
                 this.length = length;
                 this.up = up
-                this.starting = up ? new Position(pos.x, pos.y+length) : pos
+                this.starting = up ? new Position(pos.x, pos.y+length-1) : pos
     }
 
     getPoints() {
@@ -16,7 +16,7 @@ class Ship {
             }
 
             for (var i = 0; i < this.length; i++) {
-                points[points.length] = new Position(this.starting.x, this.starting.y-i-1)
+                points[points.length] = new Position(this.starting.x, this.starting.y-i)
             }
 
         } else {
