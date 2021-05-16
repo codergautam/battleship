@@ -32,7 +32,13 @@ if($game) {
                     if($player->donePlacing == false) {
                     $game->donePlacing($player);
                     $player->donePlacing = true;
+
+                    if($game->state == 1) {
+                        $res->waitforenemy = false;
                     $game->start();
+                    } else {
+                        $res->waitforenemy = true;
+                    }
                     DbUtils::updateGame($game, $id);
                                                                     $res->success = true;
     echo json_encode($res);

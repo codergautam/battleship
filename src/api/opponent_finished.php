@@ -11,13 +11,12 @@ $game = DbUtils::getGame($id);
 if($playerId) {
 if($game) {
 $player = $game->getPlayerFromId($playerId);
+$enemy = $game->getPlayer($player->playerNum == 1 ? 2 : 1);
 if($player) {
-    $res->board =  $player->board->board;
-     $res->state = $game->state;
-    if($game->state == 0) {
-    $res->shipsToPlace = 5 - count($player->board->ships);
-    $res->donePlacing = $player->donePlacing;
-    }
+$res->enemyFinished = $enemy->donePlacing;
+if(!$res->enemyFinished) {
+    $res->needToPlace = 5-  count($enemy->board->ships);
+}
     $res->success = true;
     echo json_encode($res);
 } else {

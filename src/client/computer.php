@@ -35,7 +35,7 @@
             </div>
                         <div style="display: none;" class="row" id="rfow">
                 <h4 class="col">Your board</h4>
-                <h4 class="col">Enemy's board</h4>
+                <h4 class="col">Opponent's board</h4>
             </div>
             <br>
             <div class="row" id="row">
