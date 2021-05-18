@@ -57,7 +57,7 @@ justify-content: center;
         <br><br><br><br>
         <div class="flex">
         <button type="button" onclick="computer()"class="btn btn-primary" button>Play against Computer!</button>
-                 <button type="button" onclick="human()"class="btn btn-secondary" button>Play multiplayer! (very very buggy)</button>
+                 <button type="button" onclick="human()"class="btn btn-secondary" button>Play multiplayer!</button>
                 </div>
                 </center>
 </div>
