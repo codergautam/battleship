@@ -17,7 +17,7 @@
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
             <div class="container">
-                <a class="navbar-brand" href="#!">Battleship - Multiplayer</a>
+                <a class="navbar-brand" href="human.php">Battleship - Multiplayer</a>
             </div>
         </nav>
         <!-- Page content-->
