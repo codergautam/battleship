@@ -157,6 +157,7 @@ function checkPlaceShip(ship) {
 }
     function placeCellClick(pos) {
         if(!placing) return 
+        if(waitingforopponent) return
         if(document.getElementById(pos.asString).innerHTML == " ") {
         if(placestate == 0 ||placestate == 1) {
             elem("confirm").disabled = false
