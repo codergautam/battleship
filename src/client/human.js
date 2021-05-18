@@ -249,10 +249,14 @@ elem("confirm").onclick = function() {
         elem("cancel").innerHTML = "Cancel";
         placestate = 2;
     } else if(placestate == 2) {
+        elem("confirm").disabled = true;
+        elem("cancel").disabled = true;
 sendRequest(`../api/place_ship.php?id=${gameId}&playerId=${playerId}&up=${isUp?"1":"0"}&pos=${shipStart.starting.asString}&length=${getShipLength(shipsToPlace)}`)
 .then((placeData) => {
     if(placeData.success) {
         placestate = 0;
+        elem("confirm").disabled = false;
+        elem("cancel").disabled = false;
         elem("confirm").style.display = "none";
         elem("cancel").style.display = "none";
         shipsToPlace -= 1;
@@ -336,9 +340,7 @@ elem("cancel").onclick = function() {
 
 
 
-//if(gameId && playerId) {
- //reconnect()
-//} else {
+//actual code
                 elem("text-main").innerHTML = "Retrieving game board.."
                 sendRequest("../api/get_board.php?id="+gameId+"&playerId="+playerId).then((boardInfo) => {
                     if(boardInfo.success) {    
@@ -447,14 +449,6 @@ setInterval(() => {
             colorCells(statsData.pointsHitPlayer, true) */
          }
      })
-     /*
-            }
-         } else {
-             alert(turnData.errormsg)
-         }
-     })
-*/
-
     }
 
     if(waitingforopponent) {
